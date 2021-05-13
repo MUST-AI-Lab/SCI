@@ -31,7 +31,7 @@ def NT_xent(sim_matrix, temperature=0.5, chunk=2, eps=1e-8):
 
     device = sim_matrix.device
 
-    B = sim_matrix.size(0) // chunk  # B = B' / chunk
+    B = sim_matrix.size(0) // chunk  # B = B' / chunk               // operator is : 9 // 2 = 4,   -9 // 2 = -5
 
     eye = torch.eye(B * chunk).to(device)  # (B', B')
     sim_matrix = torch.exp(sim_matrix / temperature) * (1 - eye)  # remove diagonal
@@ -40,7 +40,7 @@ def NT_xent(sim_matrix, temperature=0.5, chunk=2, eps=1e-8):
     sim_matrix = -torch.log(sim_matrix / (denom + eps) + eps)  # loss matrix
 
     loss = torch.sum(sim_matrix[:B, B:].diag() + sim_matrix[B:, :B].diag()) / (2 * B)
-
+    print(loss)
     return loss
 
 
